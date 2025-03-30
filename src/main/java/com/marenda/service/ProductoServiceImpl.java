@@ -9,7 +9,7 @@ import com.marenda.model.Producto;
 import com.marenda.repository.ProductoRepository;
 
 @Service
-public class PruductoServiceImpl implements ProductoService{
+public class ProductoServiceImpl implements ProductoService{
 	
 	@Autowired
 	private ProductoRepository productoRepository;
