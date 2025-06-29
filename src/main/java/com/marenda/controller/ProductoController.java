@@ -1,5 +1,6 @@
 package com.marenda.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.*;
@@ -10,10 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.marenda.model.Producto;
 import com.marenda.model.Usuario;
 import com.marenda.service.ProductoService;
+import com.marenda.service.UploadFileService;
 
 @Controller
 @RequestMapping("/productos")
@@ -23,6 +27,10 @@ public class ProductoController {
 	
 	@Autowired
 	private ProductoService productoService;
+	
+	@Autowired
+	private UploadFileService upload;
+	
 	
 	@GetMapping("")
 	public String show( Model model) {
@@ -38,15 +46,29 @@ public class ProductoController {
 	/**
 	 * @param producto
 	 * @return
+	 * @throws IOException 
 	 */
 	@PostMapping("/save")
-	public String save(Producto producto) {
+	public String save(Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
 		LOGGER.info("este es objeto de producto{}",producto);
 		Usuario U = new Usuario(1, "", "", "", "", "", "", "");
 		producto.setUsuario(U);
+		
+		//desde aqui esta la logica para subir imagen al servidor
+		if (producto.getId()==null) {//cuando se crear un producto
+			String nombreImagen= upload.saveImage(file);
+			producto.setImagen(nombreImagen);	
+			}else {
+				if (file.isEmpty()) {//editamos el producto pero mo cambiamoa la imagen
+					Producto p = new Producto();
+					p=productoService.get(producto.getId()).get();
+					producto.setImagen(p.getImagen());
+				}else {//cambiar la imagen cuando editamos producto
+					String nombreImagen= upload.saveImage(file);
+					producto.setImagen(nombreImagen);
+				}
+			}
 		productoService.save(producto);
-		
-		
 		return "redirect:/productos";
 	}
 	
