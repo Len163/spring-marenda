@@ -19,21 +19,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.marenda.model.DetalleOrden;
 import com.marenda.model.Orden;
 import com.marenda.model.Producto;
+import com.marenda.model.Usuario;
+import com.marenda.repository.IUsuarioRepository;
+import com.marenda.service.IUsuarioService;
 import com.marenda.service.ProductoService;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
 
+    private final IUsuarioRepository IUsuarioRepository;
+
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);
+	
 	@Autowired
 	private ProductoService productoService;
 
+	@Autowired
+	private IUsuarioService usuarioService;
+	
+	
 	// para almacenar los detalles dela orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
 
 	// datos de la orden
 	Orden orden = new Orden();
+
+    HomeController(IUsuarioRepository IUsuarioRepository) {
+        this.IUsuarioRepository = IUsuarioRepository;
+    }
 
 	@GetMapping("/")
 	public String home(Model model) {
@@ -125,8 +139,14 @@ public class HomeController {
 	}
 	
 	@GetMapping("/order")
-	public String order() {
+	public String order(Model model) {
 		
+		Usuario usuario = usuarioService.findById(1).get();
+		
+		model.addAttribute("carrito", detalles);
+		model.addAttribute("orden", orden);
+		model.addAttribute("usuario", usuario);
+
 		
 		return "usuario/resumenorden";
 	}
