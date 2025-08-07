@@ -2,6 +2,8 @@ package com.marenda.service;
 
  
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,12 @@ public class UsuarioServiceImpl implements IOrdenService {
 	public Orden save(Orden orden) {
 	 
 		return ordenRepository.save(orden);
+	}
+
+	@Override
+	public List<Orden> fiNdAll() {
+		// TODO Auto-generated method stub
+		return ordenRepository.findAll();
 	}
 
 	 
