@@ -1,9 +1,11 @@
 package com.marenda.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ import com.marenda.model.Orden;
 import com.marenda.model.Producto;
 import com.marenda.model.Usuario;
 import com.marenda.repository.IUsuarioRepository;
+import com.marenda.service.IDetalleOrdenService;
+import com.marenda.service.IOrdenService;
 import com.marenda.service.IUsuarioService;
 import com.marenda.service.ProductoService;
 
@@ -38,6 +42,11 @@ public class HomeController {
 	@Autowired
 	private IUsuarioService usuarioService;
 	
+	@Autowired
+	private IOrdenService ordenService;
+	
+	@Autowired
+	private IDetalleOrdenService detalleOrdenService;
 	
 	// para almacenar los detalles dela orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
@@ -150,4 +159,41 @@ public class HomeController {
 		
 		return "usuario/resumenorden";
 	}
+	
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		Date fechaCreacion = new Date();
+		orden.setFechaCreacion(fechaCreacion);
+		orden.setNumero(ordenService.generarNumeroOrden());
+		
+		//usuario
+		Usuario usuario = usuarioService.findById(1).get();
+		
+		orden.setUsuario(usuario) ;
+		ordenService.save(orden);
+		
+		//uardardetalles 
+		for (DetalleOrden dt:detalles) {
+			dt.setOrden(orden);
+		 detalleOrdenService.save(dt)	;		
+		}
+		
+		//limpiar lista y orden
+		orden= new Orden();
+		detalles.clear();
+ 	
+		return "redirect:/";
+	}
+	
+	@PostMapping("/search")
+	public String searchProducto(@RequestParam String nombre , Model model) {
+		log.info("nombre del producto: {}", nombre);	
+		List<Producto> productos= productoService.findAll().stream().filter(p -> p.getNombre().contains(nombre )).collect(Collectors.toList() ); 
+		model.addAttribute("productos",productos);
+		
+		
+		
+		return "usuario/home";
+	}
+	
 }

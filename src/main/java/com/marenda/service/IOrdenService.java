@@ -6,8 +6,7 @@ import com.marenda.model.Orden;
 
 public interface IOrdenService    {
 	
-	List<Orden> fiNdAll();
-	
-	
+	List<Orden> fiNdAll(); 
 	Orden save (Orden orden);
+	String generarNumeroOrden();
 }
