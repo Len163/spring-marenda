@@ -16,8 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.marenda.model.Producto;
 import com.marenda.model.Usuario;
+import com.marenda.service.IUsuarioService;
 import com.marenda.service.ProductoService;
 import com.marenda.service.UploadFileService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/productos")
@@ -27,6 +30,9 @@ public class ProductoController {
 	
 	@Autowired
 	private ProductoService productoService;
+	
+	@Autowired
+	private IUsuarioService usuarioService;
 	
 	@Autowired
 	private UploadFileService upload;
@@ -49,10 +55,15 @@ public class ProductoController {
 	 * @throws IOException 
 	 */
 	@PostMapping("/save")
-	public String save(Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
+	public String save(Producto producto,@RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
 		LOGGER.info("este es objeto de producto{}",producto);
-		Usuario U = new Usuario(1, "", "", "", "", "", "", "");
+		
+		
+		
+		Usuario U = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		producto.setUsuario(U);
+		
+		
 		
 		//desde aqui esta la logica para subir imagen al servidor
 		if (producto.getId()==null) {//cuando se crear un producto
