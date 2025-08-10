@@ -1,13 +1,15 @@
 package com.marenda.model;
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
+ 
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,8 +28,8 @@ public class Orden {
 	@ManyToOne
 	private Usuario usuario;
 	
-	@OneToOne (mappedBy = "orden")
-	private DetalleOrden detalle;
+	@OneToMany (mappedBy = "orden")
+	private List<DetalleOrden> detalle;
 	
 	public Orden() {
 		
@@ -45,12 +47,14 @@ public class Orden {
 	@Override
 	public String toString() {
 		return "Orden [id=" + id + ", numero=" + numero + ", fechaCreacion=" + fechaCreacion + ", fechaRecibida="
-				+ fechaRecibida + ", total=" + total + "]";
+				+ fechaRecibida + ", total=" + total + ", usuario=" + usuario + ", detalle=" + detalle + "]";
 	}
 
 	public Integer getId() {
 		return id;
 	}
+
+
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -96,13 +100,15 @@ public class Orden {
 		this.usuario = usuario;
 	}
 
-	public DetalleOrden getDetalle() {
+	public List<DetalleOrden> getDetalle() {
 		return detalle;
 	}
 
-	public void setDetalle(DetalleOrden detalle) {
+	public void setDetalle(List<DetalleOrden> detalle) {
 		this.detalle = detalle;
 	}
+
+ 
 	
 	
 	}
