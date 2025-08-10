@@ -22,10 +22,12 @@
 
 <body>
 
-	<!-- Navigation -->
-	<div th:include="usuario/templateUsuario.html::header">
+	<!-- cuando el uasuario no esta logueDO-->
+	<div th:include="usuario/templateUsuario.html::header" th:if="${sesion==null}"></div>
 
-	</div>
+	<!-- cuNDO EL usuario esta logueado------->
+	 <div th:include="usuario/templateUsuario.html::header-user" th:unless="${sesion==null}"></div>
+	
 
 
 	<!-- Page Content -->
