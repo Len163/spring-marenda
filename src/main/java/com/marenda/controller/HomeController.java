@@ -1,4 +1,4 @@
-package com.marenda.controller;
+ package com.marenda.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +63,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String home(Model model, HttpSession session) {
 		
-		log.info("sessiond edel usuario: {}",session.getAttribute("idusuario") );
+		log.info("session   del usuario: {}",session.getAttribute("idusuario") );
 
 		model.addAttribute("productos", productoService.findAll());
 		
@@ -187,7 +187,7 @@ public class HomeController {
 		//uardardetalles 
 		for (DetalleOrden dt:detalles) {
 			dt.setOrden(orden);
-		 detalleOrdenService.save(dt)	;		
+		 detalleOrdenService.save(dt);		
 		}
 		
 		//limpiar lista y orden
