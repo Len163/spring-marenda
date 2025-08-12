@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.marenda.model.Producto;
+import com.marenda.service.IOrdenService;
 import com.marenda.service.IUsuarioService;
 import com.marenda.service.ProductoService;
 
@@ -21,6 +22,9 @@ public class AdministradorController {
 	
 	@Autowired
 	private IUsuarioService usuarioService;
+	
+	@Autowired
+	private IOrdenService ordenService;
 	
 	
 	@GetMapping("")
@@ -36,6 +40,12 @@ public class AdministradorController {
 		//meotdo para traer al path adminisrador/usuarios  
 		model.addAttribute("usuarios", usuarioService.findAll());
 		return"administrador/usuarios";
+	}
+	
+	@GetMapping("/ordenes")
+	public String ordenes(Model model) {
+		model.addAttribute("ordenes", ordenService.fiNdAll());
+		return "administrador/ordenes";
 	}
 	
 }
