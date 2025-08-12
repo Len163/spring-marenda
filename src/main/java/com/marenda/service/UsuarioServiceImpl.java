@@ -24,16 +24,20 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public Usuario save(Usuario usuario) {
-		// TODO Auto-generated method stub
+	public Usuario save(Usuario usuario) { 
 		return usuarioRepository.save(usuario);
 	}
 
 	@Override
-	public Optional<Usuario> findByEmail(String email) {
-		// TODO Auto-generated method stub
+	public Optional<Usuario> findByEmail(String email) { 
 		return usuarioRepository.findByEmail(email);
 		
+	}
+
+	@Override
+	public List<Usuario> findAll() { 
+		
+		return usuarioRepository.findAll();
 	}
 
  
